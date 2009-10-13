@@ -13,6 +13,16 @@ def gcf(n, d):
             m = max(m, f)
     return m
 
+def gcd(n, d):
+    return gcf(n, d)
+
+def gcf_list(*args):
+    m = 0
+    for f in factors(args[0]):
+        if all([arg % f == 0 for arg in args[1:]]): 
+            m = max(m, f)
+    return m
+
 def simplify(n, d):
     fact = gcf(n,d)
     return n//fact, d//fact
@@ -255,11 +265,13 @@ def _TEST():
     assert [cf for cf in common_factors(10, 10)] == [1, 2, 5, 10]
     assert [sm for sm in simplifications(20, 30)] == [(20, 30), (10, 15), (4, 6), (2, 3)]
     
+    assert gcf_list(6, 8, 10) == 2
+    assert gcf_list(7, 7 * 5, 7 * 13, 7 * 23, 7 * 37) == 7
+    assert gcf_list(3, 13, 7, 37, 53) == 1
+
     print "Tests complete."
 
-def _BENCHMARK():
-    from time import time
-    print "Running benchmarks..."
+def benchmark_is_prime():
     s = time()
     c = 0
     for round in range(100):
@@ -272,6 +284,29 @@ def _BENCHMARK():
         for x in xrange(1, 7920): 
             if m_isprime(x): c += 1
     print c, "m_isprime's in", time() - s, "seconds"
+
+def benchmark_factorials():
+    s = time()
+    c = 0
+    for round in range(1, 50):
+        for x in xrange(1, 60): 
+            factorial(x * round)
+            c += 1
+    print c, "factorials in", time() - s, "seconds"
+    s = time()
+    c = 0
+    for round in range(1, 50):
+        for x in xrange(1, 60): 
+            m_factorial(x * round)
+            c += 1
+    print c, "m_factorials in", time() - s, "seconds"
+
+from time import time
+
+def _BENCHMARK():
+    print "Running benchmarks..."
+    benchmark_is_prime()
+    benchmark_factorials()
 
 if __name__=="__main__":
     #print count_factors(4)
