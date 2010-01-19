@@ -10,7 +10,6 @@ also prime.
 What is the largest n-digit pandigital prime that exists?
 """
 
-
 import psyco
 psyco.full()
 
